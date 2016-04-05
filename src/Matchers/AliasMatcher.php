@@ -1,13 +1,10 @@
 <?php
 
-
 namespace TheCodingMachine\ServiceProvider\Converter\Matchers;
 
 use Assembly\Reference;
 use BetterReflection\Reflection\ReflectionMethod;
 use Interop\Container\Definition\DefinitionInterface;
-use PhpParser\Node;
-
 
 class AliasMatcher extends AbstractMatcher
 {

@@ -1,18 +1,16 @@
 <?php
 
-
 namespace TheCodingMachine\ServiceProvider\Converter;
 
 use Assembly\FactoryCallDefinition;
 use BetterReflection\Reflection\ReflectionMethod;
 use Interop\Container\Definition\DefinitionInterface;
-use PhpParser\Node;
 use TheCodingMachine\ServiceProvider\Converter\Matchers\AliasMatcher;
 use TheCodingMachine\ServiceProvider\Converter\Matchers\Matcher;
 use TheCodingMachine\ServiceProvider\Converter\Matchers\ScalarMatcher;
 
 /**
- * Casts service providers into container definitions
+ * Casts service providers into container definitions.
  */
 class ServiceProviderConverter
 {
@@ -23,6 +21,7 @@ class ServiceProviderConverter
 
     /**
      * ServiceProviderConverter constructor.
+     *
      * @param Matcher[] $matchers
      */
     public function __construct(array $matchers)
@@ -34,7 +33,7 @@ class ServiceProviderConverter
     {
         return new self([
             new AliasMatcher(),
-            new ScalarMatcher()
+            new ScalarMatcher(),
         ]);
     }
 
@@ -49,9 +48,6 @@ class ServiceProviderConverter
         }
 
         // If no matcher matches... let's cast to a factory
-        return new FactoryCallDefinition("TODO", "FIXME");
+        return new FactoryCallDefinition('TODO', 'FIXME');
     }
-
-
-
 }

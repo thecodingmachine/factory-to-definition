@@ -1,15 +1,12 @@
 <?php
 
-
 namespace TheCodingMachine\ServiceProvider\Converter\Fixtures;
-
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\ServiceProvider;
 
 class TestServiceProvider implements ServiceProvider
 {
-
     /**
      * @return array
      */
@@ -43,10 +40,11 @@ class TestServiceProvider implements ServiceProvider
         return [
             'foo' => 'bar',
             'baz' => [
-                'foo' => 42
+                'foo' => 42,
             ],
             'bool' => true,
-            'ref' => $container->get('foo')
+            'bool2' => false,
+            'ref' => $container->get('foo'),
         ];
     }
 
@@ -55,4 +53,8 @@ class TestServiceProvider implements ServiceProvider
         return __DIR__;
     }
 
+    public static function notScalar2()
+    {
+        return M_LN2;
+    }
 }

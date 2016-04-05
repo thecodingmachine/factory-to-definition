@@ -1,12 +1,10 @@
 <?php
 
-
 namespace TheCodingMachine\ServiceProvider\Converter\Matchers;
 
 use Assembly\ParameterDefinition;
 use BetterReflection\Reflection\ReflectionMethod;
 use Interop\Container\Definition\DefinitionInterface;
-use PhpParser\Node;
 
 /**
  * Maps "pure" parameter factories.
@@ -18,7 +16,6 @@ use PhpParser\Node;
  * }
  *
  * Note: this also accepts arrays and references in arrays
- *
  */
 class ScalarMatcher extends AbstractMatcher
 {

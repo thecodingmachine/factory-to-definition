@@ -1,11 +1,8 @@
 <?php
 
-
 namespace TheCodingMachine\ServiceProvider\Converter;
 
-
 use Assembly\Reference;
-use BetterReflection\Reflection\ReflectionClass;
 use BetterReflection\Reflector\ClassReflector;
 use BetterReflection\SourceLocator\Type\ComposerSourceLocator;
 use Interop\Container\Definition\ParameterDefinitionInterface;
@@ -59,11 +56,12 @@ class ServiceProviderConverterTest extends \PHPUnit_Framework_TestCase
             array('scalar4', [
                 'foo' => 'bar',
                 'baz' => [
-                    'foo' => 42
+                    'foo' => 42,
                 ],
                 'bool' => true,
-                'ref' => new Reference('foo')
-            ])
+                'bool2' => false,
+                'ref' => new Reference('foo'),
+            ]),
         );
     }
 
@@ -74,6 +72,10 @@ class ServiceProviderConverterTest extends \PHPUnit_Framework_TestCase
         $myClass = $this->reflector->reflect(TestServiceProvider::class);
 
         $scalarMethod = $myClass->getMethod('notScalar');
+        $definition = $converter->toDefinition($scalarMethod);
+        $this->assertNotInstanceOf(ParameterDefinitionInterface::class, $definition);
+
+        $scalarMethod = $myClass->getMethod('notScalar2');
         $definition = $converter->toDefinition($scalarMethod);
         $this->assertNotInstanceOf(ParameterDefinitionInterface::class, $definition);
     }

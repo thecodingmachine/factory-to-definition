@@ -1,6 +1,5 @@
 <?php
 
-
 namespace TheCodingMachine\ServiceProvider\Converter\Matchers;
 
 use Assembly\Reference;
@@ -17,7 +16,6 @@ use PhpParser\Node\Expr\Array_;
 use TheCodingMachine\ServiceProvider\Converter\MatchingException;
 use PhpParser\Node\Expr\ConstFetch;
 
-
 abstract class AbstractMatcher implements Matcher
 {
     /**
@@ -27,17 +25,19 @@ abstract class AbstractMatcher implements Matcher
      * Value is null if no parameter passed.
      *
      * @param ReflectionMethod $method
+     *
      * @return array
      */
     protected function getParametersVariableNames(ReflectionMethod $method) : array
     {
-        $array = array_map(function(ReflectionParameter $parameter) {
+        $array = array_map(function (ReflectionParameter $parameter) {
             return $parameter->getName();
         }, $method->getParameters());
 
         while (count($array) < 2) {
             $array[] = null;
         }
+
         return $array;
     }
 
@@ -46,12 +46,14 @@ abstract class AbstractMatcher implements Matcher
      * Returns that statement.
      *
      * @param array $nodes
+     *
      * @return Return_
      */
     protected function assertIsReturnStatement(array $nodes) : Return_
     {
         $this->assert(count($nodes) === 1);
         $this->assert($nodes[0] instanceof Return_);
+
         return $nodes[0];
     }
 
@@ -60,6 +62,7 @@ abstract class AbstractMatcher implements Matcher
      * Returns the service_name part.
      *
      * @param Node $node
+     *
      * @return string
      */
     protected function assertIsReference(Node $node, string $containerVariableName) : string
@@ -69,6 +72,7 @@ abstract class AbstractMatcher implements Matcher
 
         $this->assert(count($methodCall->args) === 1);
         $target = $this->assertIsString($methodCall->args[0]->value);
+
         return $target;
     }
 
@@ -79,6 +83,7 @@ abstract class AbstractMatcher implements Matcher
         } catch (MatchingException $e) {
             return false;
         }
+
         return true;
     }
 
@@ -87,6 +92,7 @@ abstract class AbstractMatcher implements Matcher
         $this->assert($node instanceof MethodCall);
         /* @var node MethodCall */
         $this->assert($expectedMethodName === null || $expectedMethodName === $node->name);
+
         return $node;
     }
 
@@ -95,6 +101,7 @@ abstract class AbstractMatcher implements Matcher
         $this->assert($node instanceof Variable);
         /* @var node Variable */
         $this->assert($expectedVariableName === null || $expectedVariableName === $node->name);
+
         return $node;
     }
 
@@ -128,10 +135,12 @@ abstract class AbstractMatcher implements Matcher
 
                 $arr[$key] = $value;
             }
+
             return $arr;
         }
         if ($containerVariableName && $this->isReference($node, $containerVariableName)) {
             $target = $this->assertIsReference($node, $containerVariableName);
+
             return new Reference($target);
         }
         throw MatchingException::mismatch();
@@ -142,9 +151,9 @@ abstract class AbstractMatcher implements Matcher
         $this->assert($const->name instanceof Node\Name);
         $this->assert(count($const->name->parts) === 1);
         $name = $const->name->parts[0];
-        if ($name === 'true') {
+        if (strtolower($name) === 'true') {
             return true;
-        } elseif ($name === 'false') {
+        } elseif (strtolower($name) === 'false') {
             return false;
         }
         throw MatchingException::mismatch();
