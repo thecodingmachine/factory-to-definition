@@ -4,6 +4,7 @@
 namespace TheCodingMachine\ServiceProvider\Converter;
 
 
+use Assembly\Reference;
 use BetterReflection\Reflection\ReflectionClass;
 use BetterReflection\Reflector\ClassReflector;
 use BetterReflection\SourceLocator\Type\ComposerSourceLocator;
@@ -59,7 +60,9 @@ class ServiceProviderConverterTest extends \PHPUnit_Framework_TestCase
                 'foo' => 'bar',
                 'baz' => [
                     'foo' => 42
-                ]
+                ],
+                'bool' => true,
+                'ref' => new Reference('foo')
             ])
         );
     }

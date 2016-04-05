@@ -52,6 +52,6 @@ It can:
   }
   ```
   
-  will map to a `ParameterDefinition` object containing `my_value` as a value.
+  will map to a `ParameterDefinition` object containing `my_value` as a value. Note: as per the definition-interop unit test suite, a `ParameterDefinition` can be anything from a static string / number to an array of scalar values. Arrays also accept references.
   
 And that's it for now!

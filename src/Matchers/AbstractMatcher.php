@@ -3,6 +3,7 @@
 
 namespace TheCodingMachine\ServiceProvider\Converter\Matchers;
 
+use Assembly\Reference;
 use BetterReflection\Reflection\ReflectionMethod;
 use BetterReflection\Reflection\ReflectionParameter;
 use PhpParser\Node;
@@ -13,8 +14,8 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use TheCodingMachine\ServiceProvider\Converter\MatchingException;
+use PhpParser\Node\Expr\ConstFetch;
 
 
 abstract class AbstractMatcher implements Matcher
@@ -71,6 +72,16 @@ abstract class AbstractMatcher implements Matcher
         return $target;
     }
 
+    protected function isReference(Node $node, string $containerVariableName) : bool
+    {
+        try {
+            $this->assertIsReference($node, $containerVariableName);
+        } catch (MatchingException $e) {
+            return false;
+        }
+        return true;
+    }
+
     protected function assertIsMethodCall(Node $node, $expectedMethodName = null) : MethodCall
     {
         $this->assert($node instanceof MethodCall);
@@ -97,20 +108,44 @@ abstract class AbstractMatcher implements Matcher
     /**
      * Returns a scalar or array value represented by those nodes.
      */
-    protected function assertIsScalar(Node $node)
+    protected function assertIsScalar(Node $node, $containerVariableName)
     {
         if ($node instanceof String_ || $node instanceof LNumber || $node instanceof DNumber) {
             return $node->value;
         }
+        if ($node instanceof ConstFetch) {
+            try {
+                return $this->assertBoolConstant($node);
+            } catch (MatchingException $e) {
+                // ignore error and continue
+            }
+        }
         if ($node instanceof Array_) {
             $arr = [];
             foreach ($node->items as $item) {
-                $key = $this->assertIsScalar($item->key);
-                $value = $this->assertIsScalar($item->value);
+                $key = $this->assertIsScalar($item->key, $containerVariableName);
+                $value = $this->assertIsScalar($item->value, $containerVariableName);
 
                 $arr[$key] = $value;
             }
             return $arr;
+        }
+        if ($containerVariableName && $this->isReference($node, $containerVariableName)) {
+            $target = $this->assertIsReference($node, $containerVariableName);
+            return new Reference($target);
+        }
+        throw MatchingException::mismatch();
+    }
+
+    protected function assertBoolConstant(ConstFetch $const) : bool
+    {
+        $this->assert($const->name instanceof Node\Name);
+        $this->assert(count($const->name->parts) === 1);
+        $name = $const->name->parts[0];
+        if ($name === 'true') {
+            return true;
+        } elseif ($name === 'false') {
+            return false;
         }
         throw MatchingException::mismatch();
     }

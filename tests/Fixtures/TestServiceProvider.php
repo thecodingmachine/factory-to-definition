@@ -38,17 +38,19 @@ class TestServiceProvider implements ServiceProvider
         return 12.42;
     }
 
-    public static function scalar4()
+    public static function scalar4(ContainerInterface $container)
     {
         return [
             'foo' => 'bar',
             'baz' => [
                 'foo' => 42
-            ]
+            ],
+            'bool' => true,
+            'ref' => $container->get('foo')
         ];
     }
 
-    public static function notScalar()
+    public static function notScalar(ContainerInterface $container)
     {
         return __DIR__;
     }
