@@ -26,28 +26,32 @@ Why?
 - Because it's fun
 - Because it might bring very slight improvements to performances for compiled container (they can optimize container definition, but they cannot optimize factory methods).
 
-What can it do so far
-=====================
+What can it do so far?
+======================
 
 Not much, really!
 
 It can:
 
 - detect aliases and transform those into `Interop\Container\Definition\ReferenceDefinitionInterface` :
+
   ```php
   public static function alias(ContainerInterface $container)
   {
       return $container->get('foo');
   }
   ```
+  
   will map to a `ReferenceDefinition` object pointing to the `foo` container entry.
 - detect static values / parameters and transform those into `Interop\Container\Definition\ParameterDefinitionInterface` :
+
   ```php
   public static function scalar()
   {
       return 'my_value';
   }
   ```
+  
   will map to a `ParameterDefinition` object containing `my_value` as a value.
   
 And that's it for now!
