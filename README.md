@@ -41,5 +41,13 @@ It can:
   }
   ```
   will map to a `ReferenceDefinition` object pointing to the `foo` container entry.
+- detect static values / parameters and transform those into `Interop\Container\Definition\ParameterDefinitionInterface` :
+  ```php
+  public static function scalar()
+  {
+      return 'my_value';
+  }
+  ```
+  will map to a `ParameterDefinition` object containing `my_value` as a value.
   
 And that's it for now!

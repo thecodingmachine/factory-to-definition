@@ -3,23 +3,28 @@
 
 namespace TheCodingMachine\ServiceProvider\Converter\Matchers;
 
-use Assembly\Reference;
+use Assembly\ParameterDefinition;
 use BetterReflection\Reflection\ReflectionMethod;
 use Interop\Container\Definition\DefinitionInterface;
 use PhpParser\Node;
 
-
-class AliasMatcher extends AbstractMatcher
+/**
+ * Maps "pure" parameter factories.
+ *
+ * For instance:
+ *
+ * function() {
+ *  return "foo";
+ * }
+ *
+ */
+class ScalarMatcher extends AbstractMatcher
 {
     public function toDefinition(ReflectionMethod $method) : DefinitionInterface
     {
-        list($containerVariableName, $previousCallbackVariableName) = $this->getParametersVariableNames($method);
-
-        $this->assert($containerVariableName !== null);
-
         $returnStatement = $this->assertIsReturnStatement($method->getBodyAst());
-        $target = $this->assertIsReference($returnStatement->expr, $containerVariableName);
+        $value = $this->assertIsScalar($returnStatement->expr);
 
-        return new Reference($target);
+        return new ParameterDefinition($value);
     }
 }
