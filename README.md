@@ -1,6 +1,11 @@
 Warning, experimental project!
 ------------------------------
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/thecodingmachine/factory-to-definition/badges/quality-score.png?b=1.0)](https://scrutinizer-ci.com/g/thecodingmachine/factory-to-definition/?branch=1.0)
+[![Build Status](https://travis-ci.org/thecodingmachine/factory-to-definition.svg?branch=1.0)](https://travis-ci.org/thecodingmachine/factory-to-definition)
+[![Coverage Status](https://coveralls.io/repos/thecodingmachine/factory-to-definition/badge.svg?branch=1.0&service=github)](https://coveralls.io/github/thecodingmachine/factory-to-definition?branch=1.0)
+
+
 What is it?
 ===========
 
